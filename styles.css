@@ -189,7 +189,7 @@ li {
 /* Game area fills most of the screen */
 #gameArea {
     flex: 1;
-    background-color: white;
+    background-color: #e2d1d1; /* Changed from white to off-white for better cursor visibility */
     margin: 0;
     border-radius: 0;
     padding: 0;
