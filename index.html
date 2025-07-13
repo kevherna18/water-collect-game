@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Charity Water Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Start Screen (Middle) -->
+    <div id="startScreen" class="screen active mobile-screen">
+        <div class="screen-content responsive-content mobile-content">
+            <img src="img/cw_logo.png" alt="Charity Water Logo" class="logo responsive-logo mobile-logo">
+            <h1 class="responsive-title mobile-title">Water Collect</h1>
+            <p class="responsive-text mobile-text">Help bring clean water to communities in need!</p>
+            <button id="playButton" class="game-button responsive-button mobile-button">Play Game</button>
+            <button id="instructionsButton" class="game-button responsive-button mobile-button">Instructions</button>
+        </div>
+    </div>
+
+    <!-- Instructions Screen (Left) -->
+    <div id="instructionsScreen" class="screen mobile-screen">
+        <div class="screen-content responsive-content mobile-content">
+            <img src="img/cw_logo.png" alt="Charity Water Logo" class="logo responsive-logo mobile-logo">
+            <h2 class="responsive-heading mobile-heading">How to Play</h2>
+            <ul class="responsive-list mobile-list">
+                <li class="mobile-list-item">Hover over blue water drops to collect them</li>
+                <li class="mobile-list-item">Avoid green drops - they reduce your lives</li>
+                <li class="mobile-list-item">Try to get the highest score possible</li>
+                <li class="mobile-list-item">Help Charity Water bring clean water to communities</li>
+            </ul>
+            <button id="backToStartButton" class="game-button responsive-button mobile-button">Back to Start</button>
+        </div>
+    </div>
+
+    <!-- Game Screen (Right) -->
+    <div id="gameScreen" class="screen mobile-screen">
+        <div class="game-header responsive-header mobile-header mobile-stack">
+            <div class="header-logo-container mobile-logo-container">
+                <img src="img/cw_logo_horizontal.png" alt="Charity Water Logo" class="header-logo responsive-header-logo mobile-header-logo mobile-stack-logo">
+            </div>
+            <div class="game-stats responsive-stats mobile-stats mobile-stack-stats mobile-vertical-stack">
+                <div id="score" class="responsive-stat mobile-stat mobile-stack-stat">Score: 0</div>
+                <div id="lives" class="responsive-stat mobile-stat mobile-stack-stat">Lives: 3</div>
+            </div>
+        </div>
+        
+        <div id="gameArea" class="responsive-game-area mobile-game-area">
+            <button id="startGameButton" class="game-button start-button responsive-start-button mobile-start-button">Start Game</button>
+        </div>
+        
+        <div class="game-controls responsive-controls mobile-controls">
+            <button id="backToMenuButton" class="game-button responsive-button mobile-button">Back to Menu</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
