@@ -1,6 +1,51 @@
 // Log a message to the console to ensure the script is linked correctly
 console.log('JavaScript file is linked correctly.');
 
+// Function to play click sound
+function playClickSound() {
+    // Create a new audio element for the click sound
+    const clickSound = new Audio('sounds/mouse_click.mp3');
+    
+    // Set volume to a comfortable level (0.0 to 1.0)
+    clickSound.volume = 0.3;
+    
+    // Play the sound and handle any errors
+    clickSound.play().catch(error => {
+        // If sound fails to play, just log it (don't break the game)
+        console.log('Click sound could not play:', error);
+    });
+}
+
+// Function to play water droplet sound when score increases
+function playWaterDropSound() {
+    // Create a new audio element for the water droplet sound
+    const waterDropSound = new Audio('sounds/water-droplet-drip.mp3');
+    
+    // Set volume to a comfortable level (0.0 to 1.0)
+    waterDropSound.volume = 0.4;
+    
+    // Play the sound and handle any errors
+    waterDropSound.play().catch(error => {
+        // If sound fails to play, just log it (don't break the game)
+        console.log('Water droplet sound could not play:', error);
+    });
+}
+
+// Function to play vine boom sound when lives go down
+function playVineBoomSound() {
+    // Create a new audio element for the vine boom sound
+    const vineBoomSound = new Audio('sounds/vine-boom.mp3');
+    
+    // Set volume to a comfortable level (0.0 to 1.0)
+    vineBoomSound.volume = 0.5;
+    
+    // Play the sound and handle any errors
+    vineBoomSound.play().catch(error => {
+        // If sound fails to play, just log it (don't break the game)
+        console.log('Vine boom sound could not play:', error);
+    });
+}
+
 // Check if device is mobile based on screen width
 function isMobile() {
     return window.innerWidth <= 768;
@@ -140,27 +185,32 @@ function showScreen(screenToShow) {
 
 // Add event listeners to buttons
 playButton.addEventListener('click', function() {
+    playClickSound(); // Play sound when button is clicked
     console.log('Play button clicked');
     showScreen(gameScreen);
 });
 
 instructionsButton.addEventListener('click', function() {
+    playClickSound(); // Play sound when button is clicked
     console.log('Instructions button clicked');
     showScreen(instructionsScreen);
 });
 
 backToStartButton.addEventListener('click', function() {
+    playClickSound(); // Play sound when button is clicked
     console.log('Back to start button clicked');
     showScreen(startScreen);
 });
 
 backToMenuButton.addEventListener('click', function() {
+    playClickSound(); // Play sound when button is clicked
     console.log('Back to menu button clicked');
     showScreen(startScreen);
 });
 
 // Add event listener for start game button
 startGameButton.addEventListener('click', function() {
+    playClickSound(); // Play sound when button is clicked
     console.log('Start game button clicked');
     if (!gameRunning) {
         startGame();
@@ -175,17 +225,62 @@ let gameRunning = false;
 let waterDrops = [];
 let greenDrops = [];
 let animationId;
+let currentDifficulty = 'easy'; // Default difficulty
+
+// Function to get selected difficulty
+function getSelectedDifficulty() {
+    const difficultyRadios = document.querySelectorAll('input[name="difficulty"]');
+    for (const radio of difficultyRadios) {
+        if (radio.checked) {
+            return radio.value;
+        }
+    }
+    return 'easy'; // Default fallback
+}
+
+// Function to get difficulty settings
+function getDifficultySettings(difficulty) {
+    const settings = {
+        easy: {
+            waterDropCount: isMobile() ? 5 : 7,
+            greenDropCount: isMobile() ? 12 : 16, // Increased from 8:12
+            speedMultiplier: isMobile() ? 2 : 3.5 // Increased from 1.5:3
+        },
+        normal: {
+            waterDropCount: isMobile() ? 8 : 10,
+            greenDropCount: isMobile() ? 20 : 26, // Increased from 15:20
+            speedMultiplier: isMobile() ? 2.5 : 4.5 // Increased from 2:4
+        },
+        hard: {
+            waterDropCount: isMobile() ? 12 : 15,
+            greenDropCount: isMobile() ? 25 : 35,
+            speedMultiplier: isMobile() ? 3 : 6
+        }
+    };
+    
+    return settings[difficulty] || settings.normal;
+}
 
 // Function to update score display
 function updateScore(points) {
     score += points;
     document.getElementById('score').textContent = `Score: ${score}`;
+    
+    // Play water droplet sound when score increases
+    if (points > 0) {
+        playWaterDropSound();
+    }
 }
 
 // Function to update lives display
 function updateLives(change) {
     lives += change;
     document.getElementById('lives').textContent = `Lives: ${lives}`;
+    
+    // Play vine boom sound when lives decrease
+    if (change < 0) {
+        playVineBoomSound();
+    }
     
     // Check if game over
     if (lives <= 0) {
@@ -208,6 +303,12 @@ function resetGameButton() {
     startGameButton.textContent = 'Start Game';
     startGameButton.disabled = false;
     startGameButton.style.display = 'block';
+    
+    // Show difficulty selection again
+    const difficultyContainer = document.getElementById('difficultySelection');
+    if (difficultyContainer) {
+        difficultyContainer.style.display = 'flex';
+    }
 }
 
 // Function to create a water drop
@@ -239,10 +340,10 @@ function createWaterDrop() {
     drop.style.width = `${dropSize}px`;
     drop.style.height = `${dropSize}px`;
     
-    // Random speed and direction - slower on mobile
-    const speedMultiplier = isMobile() ? 2 : 4;
-    const speedX = (Math.random() - 0.5) * speedMultiplier;
-    const speedY = (Math.random() - 0.5) * speedMultiplier;
+    // Get difficulty settings for speed
+    const difficultySettings = getDifficultySettings(currentDifficulty);
+    const speedX = (Math.random() - 0.5) * difficultySettings.speedMultiplier;
+    const speedY = (Math.random() - 0.5) * difficultySettings.speedMultiplier;
     
     // Store drop data
     const dropData = {
@@ -298,10 +399,10 @@ function createGreenDrop() {
     drop.style.width = `${dropSize}px`;
     drop.style.height = `${dropSize}px`;
     
-    // Random speed and direction - slower on mobile
-    const speedMultiplier = isMobile() ? 2 : 4;
-    const speedX = (Math.random() - 0.5) * speedMultiplier;
-    const speedY = (Math.random() - 0.5) * speedMultiplier;
+    // Get difficulty settings for speed
+    const difficultySettings = getDifficultySettings(currentDifficulty);
+    const speedX = (Math.random() - 0.5) * difficultySettings.speedMultiplier;
+    const speedY = (Math.random() - 0.5) * difficultySettings.speedMultiplier;
     
     // Store drop data
     const dropData = {
@@ -352,21 +453,24 @@ function collectWaterDrop(dropData) {
 
 // Function to collect a green drop (reduces lives)
 function collectGreenDrop(dropData) {
-    // Remove from screen
+    // Remove the green drop from the screen (DOM)
+    // This makes the drop disappear visually
     dropData.element.remove();
     
-    // Remove from array
+    // Remove the drop data from our tracking array
+    // This prevents the game from trying to move a deleted element
     const index = greenDrops.indexOf(dropData);
     if (index > -1) {
         greenDrops.splice(index, 1);
     }
     
-    // Lose one life for green drop
+    // Lose one life for touching a green drop
     updateLives(-1);
     
     console.log('Green drop touched - life lost!');
     
-    // Create a new green drop to replace it
+    // Create a new green drop to replace the one that was removed
+    // This keeps the game challenging
     if (gameRunning) {
         createGreenDrop();
     }
@@ -432,6 +536,10 @@ function startGame() {
     console.log('Starting game...');
     gameRunning = true;
     
+    // Get selected difficulty
+    currentDifficulty = getSelectedDifficulty();
+    console.log(`Starting game with difficulty: ${currentDifficulty}`);
+    
     // Reset game state
     score = 0;
     lives = 3;
@@ -444,18 +552,23 @@ function startGame() {
     greenDrops.forEach(drop => drop.element.remove());
     greenDrops = [];
     
-    // Create fewer drops on mobile for better performance
-    const waterDropCount = isMobile() ? 8 : 10;
-    const greenDropCount = isMobile() ? 15 : 20;
+    // Get difficulty settings
+    const difficultySettings = getDifficultySettings(currentDifficulty);
     
-    // Create initial water drops
-    for (let i = 0; i < waterDropCount; i++) {
+    // Create initial water drops based on difficulty
+    for (let i = 0; i < difficultySettings.waterDropCount; i++) {
         createWaterDrop();
     }
     
-    // Create initial green drops
-    for (let i = 0; i < greenDropCount; i++) {
+    // Create initial green drops based on difficulty
+    for (let i = 0; i < difficultySettings.greenDropCount; i++) {
         createGreenDrop();
+    }
+    
+    // Hide difficulty selection
+    const difficultyContainer = document.getElementById('difficultySelection');
+    if (difficultyContainer) {
+        difficultyContainer.style.display = 'none';
     }
     
     // Start animation loop
@@ -511,6 +624,7 @@ function showGameOverPopup() {
     
     // Add event listener to learn more button
     document.getElementById('learnMoreButton').addEventListener('click', function() {
+        playClickSound(); // Play sound when button is clicked
         console.log('Learn more button clicked');
         // Open Charity Water website in new tab
         window.open('https://www.charitywater.org/', '_blank');

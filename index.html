@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Charity Water Game</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -15,6 +18,14 @@
             <p class="responsive-text mobile-text">Help bring clean water to communities in need!</p>
             <button id="playButton" class="game-button responsive-button mobile-button">Play Game</button>
             <button id="instructionsButton" class="game-button responsive-button mobile-button">Instructions</button>
+        </div>
+        
+        <!-- Footer with charity water info -->
+        <div class="start-screen-footer">
+            <a href="https://www.charitywater.org/" target="_blank" class="footer-link">
+                <img src="img/cw_logo_horizontal.png" alt="Charity Water" class="footer-logo">
+                <span class="footer-text">Learn more about charity: water</span>
+            </a>
         </div>
     </div>
 
@@ -47,6 +58,20 @@
         
         <div id="gameArea" class="responsive-game-area mobile-game-area">
             <button id="startGameButton" class="game-button start-button responsive-start-button mobile-start-button">Start Game</button>
+            <div id="difficultySelection" class="difficulty-container">
+                <div class="difficulty-option">
+                    <input type="radio" id="easy" name="difficulty" value="easy" checked>
+                    <label for="easy">Easy</label>
+                </div>
+                <div class="difficulty-option">
+                    <input type="radio" id="normal" name="difficulty" value="normal">
+                    <label for="normal">Normal</label>
+                </div>
+                <div class="difficulty-option">
+                    <input type="radio" id="hard" name="difficulty" value="hard">
+                    <label for="hard">Hard</label>
+                </div>
+            </div>
         </div>
         
         <div class="game-controls responsive-controls mobile-controls">
